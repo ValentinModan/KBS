@@ -2,6 +2,7 @@
 
 import com.racersystems.jracer.*;
 import entities.CPU;
+import entities.GPU;
 
 import java.util.ArrayList;
 
@@ -80,8 +81,58 @@ public static void main(String[] argv) {
         racer.sendRaw(message1.get(1));
         System.out.println(racer.sendRaw("(related-individuals hasPower)"));
         System.out.println("EMPTY_SPACE");
-        racer.closeConnection();
+     
+        
+        
+        System.out.println("xxx");
+        
+        message =GPU.hasPCIType("GTX_1080ti", "PCI_Express") ;
+        System.out.println("M1: "+message.get(0));
+        System.out.println("M2: "+message.get(1));
+        racer.sendRaw(message.get(0));
+        racer.sendRaw(message.get(1));
 
+        System.out.println(racer.sendRaw("(related-individuals hasPCIType)"));
+        
+        message =GPU.hasPower("GTX_1080ti", "W330");
+    	System.out.println("M1: "+message.get(0));
+        System.out.println("M2: "+message.get(1));
+        racer.sendRaw(message.get(0));
+        racer.sendRaw(message.get(1));
+
+        System.out.println(racer.sendRaw("(related-individuals hasPower)"));
+        
+        
+        message =GPU.hasBrand("nVidia", "GTX_1080ti");
+    	System.out.println("M1: "+message.get(0));
+        System.out.println("M2: "+message.get(1));
+        racer.sendRaw(message.get(0));
+        racer.sendRaw(message.get(1));
+
+        System.out.println(racer.sendRaw("(related-individuals hasBrand)"));
+        
+         
+        message =GPU.hasBandwidth("GTX_1080ti", "484GB/s");
+    	System.out.println("M1: "+message.get(0));
+        System.out.println("M2: "+message.get(1));
+        racer.sendRaw(message.get(0));
+        racer.sendRaw(message.get(1));
+
+        System.out.println(racer.sendRaw("(related-individuals hasBandwidth)"));
+        
+        
+        message =GPU.hasClockFrequency( "GTX_1080ti", "11010MHz");
+    	System.out.println("M1: "+message.get(0));
+        System.out.println("M2: "+message.get(1));
+        racer.sendRaw(message.get(0));
+        racer.sendRaw(message.get(1));
+
+        System.out.println(racer.sendRaw("(related-individuals hasClockFrequency)"));
+        
+        
+        
+        // close connection
+        racer.closeConnection();
     }
     catch (Exception e) {
         e.printStackTrace();
