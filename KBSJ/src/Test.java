@@ -47,7 +47,41 @@ public static void main(String[] argv) {
         System.out.println(racer.sendRaw("(related-individuals hasCPUVersion)"));
         System.out.println("EMPTY_SPACE");
 
-         racer.closeConnection();
+
+        message = CPU.hasBrand("Intel","Intel_Core_i7");
+        racer.sendRaw(message.get(0));
+        racer.sendRaw(message.get(1));
+        System.out.println(racer.sendRaw("(related-individuals hasBrand)"));
+        System.out.println("EMPTY_SPACE");
+
+
+        ArrayList<String> message1  = CPU.hasSocket("Intel_Core_i7","s6501");
+        System.out.println("Sending message: " + message1.get(0));
+        racer.sendRaw(message1.get(0));
+        System.out.println("Sending message: " + message1.get(1));
+        racer.sendRaw(message1.get(1));
+        System.out.println(racer.sendRaw("(related-individuals hasSocket)"));
+        System.out.println("EMPTY_SPACE");
+
+
+        message1  = CPU.hasCore("Intel_Core_i7","c4.0");
+        System.out.println("Sending message: " + message1.get(0));
+        racer.sendRaw(message1.get(0));
+        System.out.println("Sending message: " + message1.get(1));
+        racer.sendRaw(message1.get(1));
+        System.out.println(racer.sendRaw("(related-individuals hasCore)"));
+        System.out.println("EMPTY_SPACE");
+
+
+        message1  = CPU.hasPower("Intel_Core_i7","w65");
+        System.out.println("Sending message: " + message1.get(0));
+        racer.sendRaw(message1.get(0));
+        System.out.println("Sending message: " + message1.get(1));
+        racer.sendRaw(message1.get(1));
+        System.out.println(racer.sendRaw("(related-individuals hasPower)"));
+        System.out.println("EMPTY_SPACE");
+        racer.closeConnection();
+
     }
     catch (Exception e) {
         e.printStackTrace();
