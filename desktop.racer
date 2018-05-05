@@ -1,0 +1,71 @@
+;(in-tbox desktop)
+ 
+(full-reset)
+ 
+(DEFINE-PRIMITIVE-ROLE |hasCPUVersion| :RANGE |CPUVersion|) 
+(DEFINE-PRIMITIVE-ROLE |hasCPUfrequency| :RANGE |CPUFrequency|)
+;(DEFINE-PRIMITIVE-ROLE |hasMemVersion| :RANGE |MemVersion|) 
+
+(DEFINE-PRIMITIVE-ROLE |hasSize| :RANGE |Size|)
+(DEFINE-PRIMITIVE-ROLE |hasSlots| :RANGE |Slots|)
+ 
+(IMPLIES Price TOP)
+(IMPLIES CPU TOP) 
+(IMPLIES GPU TOP) 
+(IMPLIES Storage TOP) 
+(IMPLIES Memory TOP) 
+(IMPLIES PowerSource TOP)
+(IMPLIES MotherBoard TOP) 
+
+(IMPLIES TOP (ALL |hasCPUVersion| |CPUVersion|)) 
+(IMPLIES TOP (ALL |hasCPUfrequency| |CPUFrequency|))
+(IMPLIES TOP (ALL |hasSize| |Size|)) 
+(INSTANCE Intel_Core_i7 CPU) 
+(INSTANCE Intel_Core_i3 CPU)
+
+(Concept-Instances CPU)
+
+(INSTANCE 7700HK CPUVersion)
+(RELATED Intel_Core_i3 2.8GHz hasCPUfrequency)
+(RELATED Intel_Core_i7 3.2GHz hasCPUfrequency)
+(RELATED Intel_Core_i7 7700HK hasCPUVersion)
+(RELATED Intel_Core_i7 7800HK hasCPUVersion)
+(Individual-fillers Intel_Core_i7 hasCPUVersion)
+(Individual-fillers Intel_Core_i7 hasCPUfrequency)
+
+(INSTANCE 2.8GHz CPUFrequency)
+(INSTANCE 3.2GHz CPUFrequency)
+
+(related 3.2GHz 2.8GHz better)
+
+(IMPLIES DDR Memory)
+(IMPLIES GDDR Memory)
+
+   
+(INSTANCE DDR4 DDR)
+(INSTANCE DDR3 DDR)
+(INSTANCE DDR5 DDR)
+
+(INSTANCE GDDR4 GDDR)
+(INSTANCE GDDR3 GDDR)
+(INSTANCE GDDR5 GDDR)
+
+(Concept-Instances Memory)
+
+(RELATED DDR4 8GB hasSize)
+(RELATED DDR4 16GB hasSize)
+(RELATED DDR4 32GB hasSize)
+
+(Individual-fillers DDR4 hasSize)
+
+(define-rule (?x goodCPU) (and (?x CPU) (?y CPUfrequency) (?x ?y hasCPUfrequency) (?y 2.8Ghz better)))
+(define-rule (?x ?z compatible) (and (?z configuration) (?x CPU) (?y CPUfrequency) (?x ?y hasCPUfrequency) (?y 2.8Ghz better)))
+;(define-rule (?x  ?z compatible) (and (?x CPU) (?y CPUfrequency) (?x ?y hasCPUfrequency) (?y 2.8Ghz better)))
+
+(concept-instances CPU)
+(concept-instances CPUFrequency)
+(related-individuals hasCPUfrequency)
+(related-individuals better)
+(run-all-rules)
+(related-individuals compatible)
+(concept-instances goodCPU)  
