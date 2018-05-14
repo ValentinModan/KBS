@@ -6,8 +6,28 @@
 (DEFINE-PRIMITIVE-ROLE |hasCPUfrequency| :RANGE |CPUFrequency|)
 ;(DEFINE-PRIMITIVE-ROLE |hasMemVersion| :RANGE |MemVersion|) 
 
+
 (DEFINE-PRIMITIVE-ROLE |hasSize| :RANGE |Size|)
+
 (DEFINE-PRIMITIVE-ROLE |hasSlots| :RANGE |Slots|)
+
+; define roles for gpu
+
+(DEFINE-PRIMITIVE-ROLE |hasPCIType| :RANGE |PCIType|) 
+(DEFINE-PRIMITIVE-ROLE |hasType| :RANGE |Type|) 
+(DEFINE-PRIMITIVE-ROLE |hasPower| :RANGE |Power|) 
+(DEFINE-PRIMITIVE-ROLE |hasMemory| :domain (or GPU MotherBoard) :RANGE |Memory|) 
+(DEFINE-PRIMITIVE-ROLE |hasBrand| :RANGE |Brand|) 
+(DEFINE-PRIMITIVE-ROLE |hasBandwidth| :RANGE |Bandwidth|)
+(DEFINE-PRIMITIVE-ROLE |hasClockFrequency| :RANGE |ClockFrequency|)  
+
+(IMPLIES TOP (ALL |hasPCIType| |PCIType|))
+(IMPLIES TOP (ALL |hasType| |Type|))
+(IMPLIES TOP (ALL |hasPower| | Power|))
+(IMPLIES TOP (ALL |Brand| |Brand|))
+(IMPLIES TOP (ALL |hasBandwidth| |Bandwidth|))
+(IMPLIES TOP (ALL |hasClockFrequency| |ClockFrequency|))
+
  
 (IMPLIES Price TOP)
 (IMPLIES CPU TOP) 
@@ -52,20 +72,24 @@
 
 (Concept-Instances Memory)
 
+(RELATED GDDR4 8GB hasSize)
+(RELATED GDDR4 16GB hasSize)
+(RELATED GDDR4 32GB hasSize)
+
 (RELATED DDR4 8GB hasSize)
 (RELATED DDR4 16GB hasSize)
 (RELATED DDR4 32GB hasSize)
 
 (Individual-fillers DDR4 hasSize)
-
-(define-rule (?x goodCPU) (and (?x CPU) (?y CPUfrequency) (?x ?y hasCPUfrequency) (?y 2.8Ghz better)))
-(define-rule (?x ?z compatible) (and (?z configuration) (?x CPU) (?y CPUfrequency) (?x ?y hasCPUfrequency) (?y 2.8Ghz better)))
+(define-rule (GTX_1080 ?x hasMemory) (and (?x GDDR )( or (?x 16GB hasSize) (?x 32GB hasSize ))))
+;(define-rule (?x goodCPU) (and (?x CPU) (?y CPUfrequency) (?x ?y hasCPUfrequency) (?y 2.8Ghz better)))
+;(define-rule (?x ?z compatible) (and (?z configuration) (?x CPU) (?y CPUfrequency) (?x ?y hasCPUfrequency) (?y 2.8Ghz better)))
 ;(define-rule (?x  ?z compatible) (and (?x CPU) (?y CPUfrequency) (?x ?y hasCPUfrequency) (?y 2.8Ghz better)))
 
-(concept-instances CPU)
-(concept-instances CPUFrequency)
-(related-individuals hasCPUfrequency)
-(related-individuals better)
+;(concept-instances CPU)
+;(concept-instances CPUFrequency)
+;(related-individuals hasCPUfrequency)
+;(related-individuals better)
 (run-all-rules)
-(related-individuals compatible)
-(concept-instances goodCPU)  
+;(related-individuals compatible)
+;(concept-instances goodCPU)  
