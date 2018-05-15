@@ -1,0 +1,95 @@
+;(in-tbox desktop)
+ 
+(full-reset)
+
+(IMPLIES Price TOP)
+(IMPLIES CPU TOP) 
+(IMPLIES GPU TOP) 
+(IMPLIES Storage TOP) 
+(IMPLIES Memory TOP) 
+(IMPLIES PowerSource TOP)
+(IMPLIES MotherBoard TOP) 
+
+(IMPLIES TOP (ALL |hasCPU| |CPU|))
+(IMPLIES TOP (ALL |hasPrice| |Price|))
+(IMPLIES TOP (ALL |hasGPU| |GPU|))
+(IMPLIES TOP (ALL |hasStorage| |Storage|))
+(IMPLIES TOP (ALL |hasMemory| |Memory|))
+(IMPLIES TOP (ALL |hasPowerSource| |PowerSource|))
+(IMPLIES TOP (ALL |hasMotherBoard| |MotherBoard|))
+
+(IMPLIES TOP (ALL |hasMemoryType| |TOP|))
+
+
+
+;****************SUBCONCEPTS***************************
+(implies (or Intel_CPU Amd_CPU) CPU)
+(implies (or GDDR DDR) Memory)
+
+(disjoint GDDR DDR)
+
+(INSTANCE i7 Intel_CPU)
+(INSTANCE $200 Price)
+(INSTANCE GTX_1080 GPU)
+(INSTANCE 8GB Memory)
+(INSTANCE 16GB Memory)
+(INSTANCE 32GB Memory)
+
+(RELATED 8GB GDDR4 hasMemoryType)
+(RELATED 8GB GDDR5 hasMemoryType)
+
+(RELATED 16GB GDDR4 hasMemoryType)
+(RELATED 16GB GDDR5 hasMemoryType)
+ 
+(RELATED 32GB GDDR4 hasMemoryType)
+(RELATED 32GB GDDR5 hasMemoryType)
+
+	
+; computers
+
+(INSTANCE Comp1 TOP)
+(INSTANCE Comp2 TOP)
+ 
+(RELATED Comp1 i7 hasCPU)
+(RELATED Comp1 $200 hasPrice)
+(RELATED Comp1 GTX_1080 hasGPU)
+(RELATED Comp1 16GB hasMemory)
+
+
+(Individual-fillers Comp1 hasCPU)
+(Individual-fillers Comp1 hasPrice)
+(Individual-fillers Comp1 hasGPU)
+(Individual-fillers Comp1 hasMemory)
+;(concept-instances TOP)  
+
+
+;*****************ROLES**********************
+(define-primitive-role better :transitive t)
+
+(related 16GB 8GB better)
+(related 32GB 16GB better)
+
+;*******************ATTRIBUTES*********************************
+(define-concrete-domain-attribute gddrType :type real)
+(attribute-filler Comp1 5.0 gddrType)
+
+
+(equivalent GDDR5  (and TOP (= gddrType 5.0)))
+(equivalent GDDR4  (and TOP (= gddrType 4.0)))
+ 
+
+;(concept-instances good-cpu)
+; If Comp1 has 16GB of memory and GDDR5 then it is good cpu
+;(define-rule (?x  goodCPU)  (and (?x 16GB hasMemory) (?y  GDDR5 hasMemoryType)  ))
+
+;(retrieve (?x) (and (?x TOP) (?x 16GB hasMemory)))
+(retrieve (?y) (?y (and   (?x Memory)  (?x GDDR5 hasMemoryType) ) hasMemory ))
+
+
+;(Individual-fillers (retrieve (?x) (and (?x TOP) (?x 16GB hasMemory)))   hasMemory)
+
+; Find all > memory than 8GB
+(retrieve (?x) (and (?x Memory) (?x 8GB better)))
+ 
+
+;(run-all-rules)
