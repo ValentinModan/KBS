@@ -263,5 +263,8 @@
 (concept-instances good-PC)
 (all-atomic-concepts )
 
-(RETRIEVE (?RAM) (?RAM (AND RAM (= HASRAMTYPE 3.0) )))
-(RETRIEVE (?RAM) (AND (?RAM (AND RAM (>= HASMEMORY 15.0))) (?RAM (AND RAM (= HASRAMTYPE 3.0)))))
+;(RETRIEVE (?RAM) (?RAM (AND RAM (= HASRAMTYPE 3.0) )))
+;(RETRIEVE (?RAM) (AND (?RAM (AND RAM (>= HASMEMORY 15.0))) (?RAM (AND RAM (= HASRAMTYPE 3.0)))))
+
+
+

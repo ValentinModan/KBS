@@ -1,16 +1,19 @@
 package instances;
 
-public class CPU {
+public class CPU extends CommonParameters{
 
     private String cpuName;
-    private int hasMemory;
     private int hasCores;
-    private float hasFrequency;
+    private int hasFrequency;
     private int hasSocket;
 
-    public CPU(String cpuName, int hasMemory, int hasCores, float hasFrequency, int hasSocket) {
+    public CPU(String cpuName) {
         this.cpuName = cpuName;
-        this.hasMemory = hasMemory;
+
+    }
+
+    public CPU(String cpuName, int hasCores, int hasFrequency, int hasSocket) {
+        this.cpuName = cpuName;
         this.hasCores = hasCores;
         this.hasFrequency = hasFrequency;
         this.hasSocket = hasSocket;
@@ -24,13 +27,6 @@ public class CPU {
         this.cpuName = cpuName;
     }
 
-    public int getHasMemory() {
-        return hasMemory;
-    }
-
-    public void setHasMemory(int hasMemory) {
-        this.hasMemory = hasMemory;
-    }
 
     public int getHasCores() {
         return hasCores;
@@ -40,11 +36,11 @@ public class CPU {
         this.hasCores = hasCores;
     }
 
-    public float getHasFrequency() {
+    public int getHasFrequency() {
         return hasFrequency;
     }
 
-    public void setHasFrequency(float hasFrequency) {
+    public void setHasFrequency(int hasFrequency) {
         this.hasFrequency = hasFrequency;
     }
 

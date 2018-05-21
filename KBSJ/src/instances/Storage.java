@@ -1,11 +1,15 @@
 package instances;
 
-public class HDD {
+public class Storage extends CommonParameters{
     private String hddName;
     private int hasSATAType;
     private int hasMemory;
 
-    public HDD(String hddName, int hasSATAType, int hasMemory) {
+    public Storage(String hddName) {
+        this.hddName = hddName;
+    }
+
+    public Storage(String hddName, int hasSATAType, int hasMemory) {
         this.hddName = hddName;
         this.hasSATAType = hasSATAType;
         this.hasMemory = hasMemory;

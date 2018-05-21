@@ -1,6 +1,6 @@
 package instances;
 
-public class RAM {
+public class RAM extends CommonParameters{
 
 	private String ramName;
 

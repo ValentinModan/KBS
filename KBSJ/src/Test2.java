@@ -11,79 +11,174 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Test2 {
 
-    private static final String RETRIEVE_ALL = "(RETRIEVE (?RAM) ";
+    private static final String RETRIEVE_ALL = "(RETRIEVE (?RAM ?GPU ?CPU ?MotherBoard ?Storage) ";
     private static final String END_OPERATION = ")";
+    private static final int[] CPU_AND_MOTHERBOARD_SOCKETS = {1151, 1152};
+    private static final int[] RAM_AND_MOTHERBOARD_RAMTYPE = {1, 2, 3, 4};
+    private static final int[] STORAGE_AND_MOTHERBOARD_SATATYPE = {2, 3};
+    private static final int[] GPU_AND_MOTHERBOARD_PCIEXPRESS = {2, 3};
+    private static final int[][] GPU_SOURCEMIN_SOURCEMAX_POWER = {{700, 800, 900}, {800, 900, 1000}};
 
 
     private static String andOperation(String string) {
-        if(string==null)
+        if (string == null)
             return "(AND ";
         return "(AND " + string + " ";
     }
 
     private static String orOperation(String string) {
-        return " (or " + string + " ";
+        if (string == null)
+            return "(OR ";
+        return "(OR " + string + " ";
+    }
+
+    public static String stringChecker(CommonParameters commonParameter, String parameterName, int value, boolean canBeGreater) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+
+        if (commonParameter != null) {
+            if (value != 0) {
+                stringBuilder.append("(?" + commonParameter.getName() + " ");
+                {
+                    stringBuilder.append(andOperation(null));
+
+                    stringBuilder.append(commonParameter.getName() + " ");
+                    if (canBeGreater)
+                        stringBuilder.append("(>= " + parameterName + " " + value + ".0)");
+                    else
+                        stringBuilder.append("(= " + parameterName + " " + value + ".0)");
+
+                    stringBuilder.append(END_OPERATION);
+                }
+                stringBuilder.append(END_OPERATION);
+            } else {
+                stringBuilder.append("(?" + commonParameter.getName() + " ");
+
+                stringBuilder.append(commonParameter.getName() + " ");
+
+                stringBuilder.append(END_OPERATION);
+            }
+        } else {
+            stringBuilder.append("(?" + commonParameter.getName() + " ");
+
+            stringBuilder.append(commonParameter.getName() + " ");
+
+            stringBuilder.append(END_OPERATION);
+        }
+
+
+        return stringBuilder.toString();
+    }
+
+    private static String generate_same_value_rule(String firstName,String secondName, String parameter, int value){
+        return "(and (?"+firstName+"  (and "+firstName+" (= "+parameter+" " + value + ".0) ))(?"+secondName+" (and "+secondName+" (= "+parameter+" " + value + ".0))))";
+    }
+
+    private static String generate_interval_value_rule(String firstName,String secondName, String parameter, int value,int minim, int maxim) {
+        return "(and (?"+firstName+"  (and "+firstName+" (<= "+parameter+" "+value+".0)))(?"+secondName+" (and "+secondName+"(>= "+parameter+" "+minim+".0)(<= "+parameter+" "+maxim+".0))))";}
+
+    private static String generate_ram_motherboard_ramtype(int ramType) {
+        return "(and (?RAM  (and RAM (= hasRamType " + ramType + ".0) ))(?MotherBoard (and MotherBoard (= hasRamType " + ramType + ".0))))";
+    }
+
+    private static String generate_storage_motherboard_SATAType(int socketVersion) {
+        return "(and (?Storage  (and Storage (= hasSATAType " + socketVersion + ".0) ))(?MotherBoard (and MotherBoard (= hasSATAType " + socketVersion + ".0))))";
+    }
+
+    private static String generate_gpu_motherboard_PCIEXPRESS(int socketVersion) {
+        return "(and (?GPU  (and GPU (= hasPCIExpress " + socketVersion + ".0) ))(?MotherBoard (and MotherBoard (= hasPCIExpress " + socketVersion + ".0))))";
+    }
+
+    public static String generate_dependencies() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+
+        //1151.0, 1152.0 versions
+        stringBuilder.append(orOperation(null));
+        for (int socketVersion : CPU_AND_MOTHERBOARD_SOCKETS) {
+            stringBuilder.append(generate_same_value_rule("CPU","MotherBoard","hasSocket",socketVersion));
+        }
+        stringBuilder.append(END_OPERATION);
+
+
+        //RAMTYPE 1, 2, 3 ,4
+        stringBuilder.append(orOperation(null));
+        for (int ramType : RAM_AND_MOTHERBOARD_RAMTYPE) {
+            stringBuilder.append(generate_same_value_rule("RAM","MotherBoard","hasRamType",ramType));
+        }
+        stringBuilder.append(END_OPERATION);
+
+        //SATAType 2 3
+        stringBuilder.append(orOperation(null));
+        for (int sataType : STORAGE_AND_MOTHERBOARD_SATATYPE) {
+            stringBuilder.append(generate_same_value_rule("Storage","MotherBoard","hasSATAType",sataType));
+        }
+        stringBuilder.append(END_OPERATION);
+
+        //pciExpress 2 3
+        stringBuilder.append(orOperation(null));
+        for (int pciVersion : GPU_AND_MOTHERBOARD_PCIEXPRESS) {
+            stringBuilder.append(generate_same_value_rule("GPU","MotherBoard","hasPCIExpress",pciVersion));
+
+        }
+        stringBuilder.append(END_OPERATION);
+
+        stringBuilder.append(orOperation(null));
+        for (int[] powerArray : GPU_SOURCEMIN_SOURCEMAX_POWER) {
+            stringBuilder.append(generate_interval_value_rule("GPU","MotherBoard","hasPowerSource",powerArray[0],powerArray[1],powerArray[2]));
+
+        }
+        stringBuilder.append(END_OPERATION);
+
+        return stringBuilder.toString();
     }
 
 
-    public static String generate_retrieve(CPU cpu, GPU gpu, HDD hdd, MotherBoard motherBoard, RAM ram) {
+    public static String generate_retrieve(CPU cpu, GPU gpu, Storage storage, MotherBoard motherBoard, RAM ram) {
+        //for NPE
+        cpu = cpu != null ? cpu : new CPU("");
+        gpu = gpu != null ? gpu : new GPU("");
+        storage = storage != null ? storage : new Storage("");
+        ram = ram != null ? ram : new RAM("");
+        motherBoard = motherBoard != null ? motherBoard : new MotherBoard("");
+
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(RETRIEVE_ALL);
 
         stringBuilder.append(andOperation(null));
 
-        if (ram != null) {
-            if (ram.getHasMemory() != 0) {
-                stringBuilder.append("(?RAM ");
-                {
-                    stringBuilder.append(andOperation(null));
 
-                    stringBuilder.append(ram.isRam());
-                    stringBuilder.append(ram.minimumMemory());
+        //ram
+        stringBuilder.append(stringChecker(ram, "HASMEMORY", ram.getHasMemory(), true));
+        stringBuilder.append(stringChecker(ram, "HASRAMTYPE", ram.getHasRamType(), false));
 
-                    stringBuilder.append(END_OPERATION);
-                }
-                stringBuilder.append(END_OPERATION);
-            }
-            else
-            {
-                stringBuilder.append("(?RAM ");
+        //gpu
+        stringBuilder.append(stringChecker(gpu, "hasMemory", gpu.getHasMemory(), true));
+        stringBuilder.append(stringChecker(gpu, "hasPCIExpress", gpu.getHasPCIExpress(), false));
+        stringBuilder.append(stringChecker(gpu, "hasPowerSource", gpu.getHasPowerSource(), true));
 
-                stringBuilder.append(ram.isRam());
+        //cpu
+        stringBuilder.append(stringChecker(cpu, "hasCores", cpu.getHasCores(), true));
+        stringBuilder.append(stringChecker(cpu, "hasSocket", cpu.getHasSocket(), false));
+        stringBuilder.append(stringChecker(cpu, "HasFrequency", cpu.getHasFrequency(), true));
 
-                stringBuilder.append(END_OPERATION);
-            }
-            stringBuilder.append(" ");
-            if(ram.getHasRamType()!=0){
-                stringBuilder.append("(?RAM ");
-                {
-                    stringBuilder.append(andOperation(null));
+        //storage
+        stringBuilder.append(stringChecker(storage, "hasSATAType", storage.getHasSATAType(), false));
 
-                    stringBuilder.append(ram.isRam());
-                    stringBuilder.append(ram.hasType());
+        //motherboard
+        stringBuilder.append(stringChecker(motherBoard, "HasPCIExpress", motherBoard.getHasPCIExpress(), false));
+        stringBuilder.append(stringChecker(motherBoard, "HasPowerSource", motherBoard.getHasPowerSource(), true));
+        stringBuilder.append(stringChecker(motherBoard, "HasRamType", motherBoard.getHasRamType(), false));
+        stringBuilder.append(stringChecker(motherBoard, "HasSATAType", motherBoard.getHasSATAType(), false));
+        stringBuilder.append(stringChecker(motherBoard, "HasSocket", motherBoard.getHasSocket(), false));
 
-                    stringBuilder.append(END_OPERATION);
-                }
-                stringBuilder.append(END_OPERATION);
-            }
-            else{
-                stringBuilder.append("(?RAM ");
+        //dependencies
+        stringBuilder.append(generate_dependencies());
 
-                stringBuilder.append(ram.isRam());
-
-                stringBuilder.append(END_OPERATION);
-            }
-        }
-
-
-        //first and
-       // stringBuilder.append("\n");
         stringBuilder.append(END_OPERATION);
 
         //retrieve all
@@ -173,6 +268,36 @@ public class Test2 {
     // storage  - hasPowerSource
 
 
+    public static void printresult(RacerClient racer, String s) throws RacerClientException {
+        System.out.println(s);
+        System.out.println(racer.sendRaw(s));
+    }
+
+    public static void test(RacerClient racer) throws RacerClientException {
+
+        //random test
+        RAM ram = new RAM("rami");
+        GPU gpu = new GPU("gpui");
+        CPU cpu = new CPU("test");
+        Storage storage = new Storage("test");
+        MotherBoard motherBoard = new MotherBoard("test1");
+
+        printresult(racer, generate_retrieve(cpu, gpu, storage, motherBoard, null));
+
+        System.out.println();
+
+        ram.setHasMemory(15);
+
+        printresult(racer, generate_retrieve(cpu, gpu, storage, motherBoard, ram));
+
+        ram.setHasRamType(3);
+
+        printresult(racer, generate_retrieve(cpu, gpu, storage, motherBoard, ram));
+
+
+    }
+
+
     public static void main(String[] argv) {
         String ip = "127.0.0.1";
         int port = 8088;
@@ -201,13 +326,12 @@ public class Test2 {
 
             getAllCombinations(prices, racer_received);
 
-            RAM ram = new RAM("rami",3,15);
 
-            String s = generate_retrieve(null,null,null,null,ram);
-            System.out.println(s);
+            test(racer);
 
 
-            System.out.println(racer.sendRaw(s));
+            CPU cpu = new CPU("Te");
+            System.out.println(cpu.getName());
 
             // close connection
             racer.closeConnection();

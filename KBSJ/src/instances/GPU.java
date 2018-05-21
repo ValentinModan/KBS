@@ -1,6 +1,6 @@
 package instances;
 
-public class GPU {
+public class GPU extends CommonParameters{
 	private String gpuName;
 
 	private int hasMemory;
@@ -13,6 +13,18 @@ public class GPU {
 		this.hasPCIExpress = hasPCIExpress;
 		this.hasPowerSource = hasPowerSource;
 	}
+
+    public String isGPU(){
+        return  "GPU ";
+    }
+
+    public String hasPowerSource() {
+        return "(= hasPowerSource "+ hasPowerSource + ".0)";
+    }
+
+    public String minimumMemory() {
+        return "(>= HASMEMORY "+ hasMemory +".0)";
+    }
 
 	public GPU(String gpuName) {
 		super();
