@@ -1,0 +1,264 @@
+
+(full-reset)
+(implies good-PC (and pc (and good-processor) ))
+
+; Price
+(define-concrete-domain-attribute hasPrice :type Real)
+
+; For GPU/RAM
+(define-concrete-domain-attribute hasMemory :type Real)
+
+; For CPU
+(define-concrete-domain-attribute hasCores :type Real)
+(define-concrete-domain-attribute hasFrequency :type Real)
+
+; For MotherBoard/CPU
+(define-concrete-domain-attribute hasSocket :type Real)
+
+; For MotherBoard/RAM
+(define-concrete-domain-attribute hasRamType :type Real)
+
+; For MotherBoard/GPU
+(define-concrete-domain-attribute hasPCIExpress :type Real)
+(define-concrete-domain-attribute hasPowerSource :type Real)
+
+; For MotherBoard/Storage
+(define-concrete-domain-attribute hasSATAType :type Real)
+
+(disjoint good-PC bad-PC)
+
+;(instance pc1 good-PC)
+
+; (IMPLIES Price TOP)
+; (IMPLIES CPU TOP) 
+; (IMPLIES GPU TOP) 
+; (IMPLIES Storage TOP) 
+; (IMPLIES Memory TOP) 
+; (IMPLIES PowerSource TOP)
+; (IMPLIES MotherBoard TOP) 
+
+;instance
+(instance ram1 RAM)
+(instance ram2 RAM)
+(instance gpu1 GPU)
+(instance gpu2 GPU)
+(instance cpu1 CPU)
+(instance cpu2 CPU)
+(instance motherboard1 MotherBoard)
+(instance motherboard2 MotherBoard)
+
+(instance hdd1 Storage)
+(instance hdd2 Storage)
+
+
+;attribute-filler
+(attribute-filler gpu1 4.0 hasMemory)
+(attribute-filler gpu2 9.0 hasMemory)
+(attribute-filler ram2 17.0 hasMemory)
+(attribute-filler ram1 16.0 hasMemory)
+
+(attribute-filler gpu1 40.0 hasPrice)
+(attribute-filler gpu2 90.0 hasPrice)
+(attribute-filler ram2 170.0 hasPrice)
+(attribute-filler ram1 160.0 hasPrice)
+
+(attribute-filler cpu1 250.0 hasPrice)
+(attribute-filler cpu2 350.0 hasPrice)
+
+(attribute-filler cpu1 3.4 hasFrequency)
+(attribute-filler cpu2 2.8 hasFrequency)
+
+(attribute-filler cpu1 4.0 hasCores)
+(attribute-filler cpu2 8.0 hasCores)
+
+
+(attribute-filler cpu1 1151.0 hasSocket)
+(attribute-filler cpu2 1152.0 hasSocket)
+
+(attribute-filler motherboard1 1151.0 hasSocket)
+(attribute-filler motherboard2 1152.0 hasSocket)
+
+(attribute-filler motherboard1 3.0 hasRamType)
+(attribute-filler motherboard2 4.0 hasRamType)
+
+(attribute-filler gpu1 2.0 hasPCIExpress)
+(attribute-filler gpu2 3.0 hasPCIExpress)
+
+(attribute-filler motherboard1 2.0 hasPCIExpress)
+(attribute-filler motherboard2 3.0 hasPCIExpress)
+
+(attribute-filler gpu1 450.0 hasPowerSource)
+(attribute-filler gpu2 800.0 hasPowerSource)
+
+(attribute-filler motherboard1 850.0 hasPowerSource)
+(attribute-filler motherboard2 950.0 hasPowerSource)
+
+(attribute-filler gpu1 2.0 hasPCIExpress)
+(attribute-filler gpu2 3.0 hasPCIExpress)
+
+
+(attribute-filler ram1 3.0 hasRamType)
+(attribute-filler ram2 4.0 hasRamType)
+
+(attribute-filler hdd1 2.0 hasSATAType)
+(attribute-filler hdd2 3.0 hasSATAType)
+(attribute-filler motherboard1 2.0 hasSATAType)
+(attribute-filler motherboard2 3.0 hasSATAType)
+  
+;(attribute-filler pc1 16.0 hasMemory)
+;(attribute-filler pc1 3.0 hasMemory)
+
+;(attribute-fillers gpu1 hasPrice)
+;(instance comp1 TOP)
+
+(retrieve (?RAM ?GPU ?CPU ?MotherBoard ?Storage) 	( and 	(?RAM 	(and RAM
+															(> hasMemory 15.0)
+															)
+													)
+													(?GPU 	(and GPU
+																	(>= hasMemory 7.0)
+																	)
+								
+													)
+											(or
+											
+												(?CPU 	(and CPU
+														(>= hasCores 6.0)
+														)
+					
+												)
+												
+												(?CPU 	(and CPU
+														(>= hasFrequency 3.0)
+														)
+					
+												)
+											)
+											
+											(or 
+											
+												(and (?CPU  (and CPU
+														(= hasSocket 1151.0)
+														))
+													(?MotherBoard (and MotherBoard
+ 													(= hasSocket 1151.0)
+													))
+												)
+												
+												(and (?CPU (and CPU 
+														(= hasSocket 1152.0)
+														))
+													 
+														
+													(?MotherBoard (and MotherBoard
+													(= hasSocket 1152.0)
+													))
+												
+												)
+					
+											)
+											
+											
+											
+											(or 
+											
+												(and (?RAM  (and RAM
+														(= hasRamType 3.0)
+														))
+													(?MotherBoard (and MotherBoard
+ 													(= hasRamType 3.0)
+													))
+												)
+												
+												(and (?RAM (and RAM 
+														(= hasRamType 4.0)
+														))
+													 
+														
+													(?MotherBoard (and MotherBoard
+													(= hasRamType 4.0)
+													))
+												
+												)
+					
+											)
+											
+											
+											(or 
+											
+												(and (?GPU  (and GPU
+														(= hasPCIExpress 2.0)
+														))
+													(?MotherBoard (and MotherBoard
+ 													(= hasPCIExpress 2.0)
+													))
+												)
+												
+												(and (?GPU (and GPU 
+														(= hasPCIExpress 3.0)
+														))
+													 
+														
+													(?MotherBoard (and MotherBoard
+													(= hasPCIExpress 3.0)
+													))
+												
+												)
+					
+											)
+											
+											(or 
+											
+												(and (?GPU  (and GPU
+														(<= hasPowerSource 700.0)
+														))
+													(?MotherBoard (and MotherBoard
+													(>= hasPowerSource 800.0)
+													(<= hasPowerSource 900.0)
+													))
+												)
+												
+												(and (?GPU  (and GPU
+														(<= hasPowerSource 800.0)
+														))
+													(?MotherBoard (and MotherBoard
+													(>= hasPowerSource 900.0)
+													(<= hasPowerSource 1000.0)
+													))
+												)
+					
+											)
+											
+											
+											(or 
+											
+												(and (?Storage  (and Storage
+														(= hasSATAType 2.0)
+														))
+													(?MotherBoard (and MotherBoard
+ 													(= hasSATAType 2.0)
+													))
+												)
+												
+												(and (?Storage (and Storage 
+														(= hasSATAType 3.0)
+														))
+													 
+														
+													(?MotherBoard (and MotherBoard
+													(= hasSATAType 3.0)
+													))
+												
+												)
+					
+											)
+								
+								
+						)
+)
+
+
+
+
+(concept-instances good-PC)
+(all-atomic-concepts )
