@@ -1,15 +1,46 @@
 package instances;
 
 public class GPU {
-	
 	private String gpuName;
 
-	
-	
+	private int hasMemory;
+	private int hasPCIExpress;
+	private int hasPowerSource;
+
+	public GPU(String gpuName, int hasMemory, int hasPCIExpress, int hasPowerSource) {
+		this.gpuName = gpuName;
+		this.hasMemory = hasMemory;
+		this.hasPCIExpress = hasPCIExpress;
+		this.hasPowerSource = hasPowerSource;
+	}
+
 	public GPU(String gpuName) {
 		super();
 		this.gpuName = gpuName;
+	}
 
+	public int getHasMemory() {
+		return hasMemory;
+	}
+
+	public void setHasMemory(int hasMemory) {
+		this.hasMemory = hasMemory;
+	}
+
+	public int getHasPCIExpress() {
+		return hasPCIExpress;
+	}
+
+	public void setHasPCIExpress(int hasPCIExpress) {
+		this.hasPCIExpress = hasPCIExpress;
+	}
+
+	public int getHasPowerSource() {
+		return hasPowerSource;
+	}
+
+	public void setHasPowerSource(int hasPowerSource) {
+		this.hasPowerSource = hasPowerSource;
 	}
 
 	public String getGpuName() {
