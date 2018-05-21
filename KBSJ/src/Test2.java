@@ -39,8 +39,7 @@ public class Test2 {
         StringBuilder stringBuilder = new StringBuilder();
 
 
-        if (commonParameter != null) {
-            if (value != 0) {
+        if (commonParameter != null && value != 0) {
                 stringBuilder.append("(?" + commonParameter.getName() + " ");
                 {
                     stringBuilder.append(andOperation(null));
@@ -61,14 +60,6 @@ public class Test2 {
 
                 stringBuilder.append(END_OPERATION);
             }
-        } else {
-            stringBuilder.append("(?" + commonParameter.getName() + " ");
-
-            stringBuilder.append(commonParameter.getName() + " ");
-
-            stringBuilder.append(END_OPERATION);
-        }
-
 
         return stringBuilder.toString();
     }
@@ -79,18 +70,6 @@ public class Test2 {
 
     private static String generate_interval_value_rule(String firstName,String secondName, String parameter, int value,int minim, int maxim) {
         return "(and (?"+firstName+"  (and "+firstName+" (<= "+parameter+" "+value+".0)))(?"+secondName+" (and "+secondName+"(>= "+parameter+" "+minim+".0)(<= "+parameter+" "+maxim+".0))))";}
-
-    private static String generate_ram_motherboard_ramtype(int ramType) {
-        return "(and (?RAM  (and RAM (= hasRamType " + ramType + ".0) ))(?MotherBoard (and MotherBoard (= hasRamType " + ramType + ".0))))";
-    }
-
-    private static String generate_storage_motherboard_SATAType(int socketVersion) {
-        return "(and (?Storage  (and Storage (= hasSATAType " + socketVersion + ".0) ))(?MotherBoard (and MotherBoard (= hasSATAType " + socketVersion + ".0))))";
-    }
-
-    private static String generate_gpu_motherboard_PCIEXPRESS(int socketVersion) {
-        return "(and (?GPU  (and GPU (= hasPCIExpress " + socketVersion + ".0) ))(?MotherBoard (and MotherBoard (= hasPCIExpress " + socketVersion + ".0))))";
-    }
 
     public static String generate_dependencies() {
         StringBuilder stringBuilder = new StringBuilder();
