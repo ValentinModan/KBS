@@ -18,10 +18,10 @@ public static void main(String[] argv) {
          racer.openConnection();
 
 
-         System.out.println(racer.sendRaw("(racer-read-file " + filename + ")"));
-         System.out.println("-------------");
+        System.out.println(racer.sendRaw("(racer-read-file " + filename + ")"));
+        System.out.println("-------------");
 
-         racer.sendRaw("(DEFINE-PRIMITIVE-ROLE |hasSocketVersion| :RANGE |CPUSocket|) ");
+        racer.sendRaw("(DEFINE-PRIMITIVE-ROLE |hasSocketVersion| :RANGE |CPUSocket|) ");
 
         String s = racer.allRoles();
 
@@ -81,9 +81,7 @@ public static void main(String[] argv) {
         racer.sendRaw(message1.get(1));
         System.out.println(racer.sendRaw("(related-individuals hasPower)"));
         System.out.println("EMPTY_SPACE");
-     
-        
-        
+      
         System.out.println("xxx");
         
         message =GPU.hasPCIType("GTX_1080ti", "PCI_Express") ;
@@ -128,8 +126,13 @@ public static void main(String[] argv) {
         racer.sendRaw(message.get(1));
 
         System.out.println(racer.sendRaw("(related-individuals hasClockFrequency)"));
-        
-        
+            
+       System.out.println( racer.roleDescendantsM("hasMemory"));
+       
+       //racer.instanceM("X", "Y");     
+       //System.out.println( racer.conceptInstancesM("Y"));
+       
+      // racer.saveKb("\"desktop.racer\"");
         
         // close connection
         racer.closeConnection();
