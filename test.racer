@@ -279,8 +279,8 @@
 (IMPLIES TOP (ALL |hasRAM| |RAM|))
 (IMPLIES TOP (ALL |hasMotherBoard| |MotherBoard|))
 
-(instance Comp1 PC)
-(instance Comp2 PC)
+;(instance Comp1 PC)
+;(instance Comp2 PC)
 
 (RELATED Comp1 Intel_Core_i7 hasCPU)
 (RELATED Comp1 GTX_1060 hasGPU)
@@ -295,11 +295,69 @@
 ;(Individual-fillers Comp1 hasRAM)
 ;(Individual-fillers Comp1 hasMotherBoard)
 
-(attribute-filler Comp1 5.0 rating)
-(attribute-filler Comp2 15.0 rating)
+;(attribute-filler Comp1 5.0 rating)
+;(attribute-filler Comp2 15.0 rating)
 
 (implies goodPC PC)
-(equivalent goodPC ( and PC (<= rating 14.0 )))
+(implies badPC PC)
+(implies gamingPC PC)
+
+(disjoint goodPC badPC)
+(disjoint badPC gamingPC)
+(disjoint goodPC gamingPC)
+ 
+
+(equivalent goodPC ( and PC (> rating 1.0 ) (< rating 3.0 )))
+(equivalent badPC ( and PC (<= rating 1.0 )))
+(equivalent gamingPC ( and PC (>= rating 3.0 )))
+ 
 
 (concept-instances goodPC)
+(concept-instances badPC)
+(concept-instances gamingPC)
 (all-atomic-concepts )
+
+
+;---------------------------
+;Consistency
+;---------------------------
+
+
+(abox-consistent?)				
+(tbox-cyclic?)
+(tbox-coherent?)
+
+(realize-abox)
+(classify-tbox)
+
+
+; ---------------------------
+; Size
+; ---------------------------
+
+
+(evaluate (length (all-individuals)))
+(evaluate (length (all-atomic-concepts)))
+(evaluate (length (all-roles)))
+(evaluate (length (all-rules)))
+
+(all-concept-assertions)		
+;(all-role-assertions)			
+;(all-constraints)			
+
+;(describe-tbox)
+;(describe-abox)
+	
+;(taxonomy)	
+
+
+; ---------------------------
+; Expressivity
+; ---------------------------
+
+(get-tbox-language)
+(get-abox-language)
+
+(all-features)
+(all-transitive-roles)
+		

@@ -218,7 +218,7 @@ public class Test2 {
 
 	}
 
-	public static List<Group> getAllCombinationsForPC(Map<String, Integer> prices, String racer_received) {
+	public static List<Group> getAllCombinationsForPC(Map<String, Component> prices, String racer_received) {
 		int i = 0;
 		List<Group> groups = new ArrayList<Group>();
 		Group group = new Group();
@@ -233,24 +233,30 @@ public class Test2 {
 				
 				if (i % 6 == 1) {
 					group.setRam(new RAM(g[1]));
-					group.setRamPrice(prices.get(g[1]));
+					group.setRamPrice(prices.get(g[1]).getPrice());
+					group.getRam().setRating(prices.get(g[1]).getRating());
+				
 				}
 				if (i % 7 == 2) {
 					group.setGpu(new GPU(g[1]));
-					group.setGpuPrice(prices.get(g[1]));
+					group.setGpuPrice(prices.get(g[1]).getPrice());
+					group.getGpu().setRating(prices.get(g[1]).getRating());
 				}
 				if (i % 8 == 3) {
 					group.setCpu(new CPU(g[1]));
-					group.setCpuPrice(prices.get(g[1]));
+					group.setCpuPrice(prices.get(g[1]).getPrice());
+					group.getCpu().setRating(prices.get(g[1]).getRating());
 				}
 
 				if (i % 9 == 4) {
 					group.setMotherBoard(new MotherBoard(g[1]));
-					group.setMotherBoardPrice(prices.get(g[1]));
+					group.setMotherBoardPrice(prices.get(g[1]).getPrice());
+					group.getMotherBoard().setRating(prices.get(g[1]).getRating());
 				}
 				if (i % 10 == 5) {
 					group.setStorage(new Storage(g[1]));
-					group.setStoragePrice(prices.get(g[1]));
+					group.setStoragePrice(prices.get(g[1]).getPrice());
+					group.getStorage().setRating(prices.get(g[1]).getRating());
 					
 					// add the configuration to the group list
 					// and reset the counter (for the next read configuration)
@@ -262,22 +268,21 @@ public class Test2 {
 			}
 		}
 
+		/*
 		// Prices for all combinations
 		for (i = 0; i < groups.size(); i++) {
 
 			System.out.println("-----------");
 			System.out.println("Combination " + (i + 1));
-			System.out.println(groups.get(i).getGpu() + " = " + groups.get(i).getGpuPrice() + "$");
-			System.out.println(groups.get(i).getRam() + " = " + groups.get(i).getRamPrice() + "$");
-			System.out.println(groups.get(i).getCpu() + " = " + groups.get(i).getCpuPrice() + "$");
-			System.out.println(groups.get(i).getMotherBoard() + " = " + groups.get(i).getMotherBoardPrice() + "$");
-			System.out.println(groups.get(i).getStorage() + " = " + groups.get(i).getStoragePrice() + "$");
-			System.out.println("Total price= "
-					+ (groups.get(i).getGpuPrice() + groups.get(i).getRamPrice() + groups.get(i).getCpuPrice()
-							+ groups.get(i).getMotherBoardPrice() + groups.get(i).getStoragePrice())
-					+ "$");
+			System.out.println(groups.get(i).getGpu() + " = " + groups.get(i).getGpuPrice() + "$" +"R: "+groups.get(i).getGpu().getRating());
+			System.out.println(groups.get(i).getRam() + " = " + groups.get(i).getRamPrice() + "$"+"R: "+groups.get(i).getRam().getRating());
+			System.out.println(groups.get(i).getCpu() + " = " + groups.get(i).getCpuPrice() + "$"+"R: "+groups.get(i).getCpu().getRating());
+			System.out.println(groups.get(i).getMotherBoard() + " = " + groups.get(i).getMotherBoardPrice() + "$"+"R: "+groups.get(i).getMotherBoard().getRating());
+			System.out.println(groups.get(i).getStorage() + " = " + groups.get(i).getStoragePrice() + "$"+"R: "+groups.get(i).getStorage().getRating());
+			System.out.println("Total price= "+ groups.get(i).getTotalPrice()+"$");
+			System.out.println("Rating= "+ groups.get(i).getAverageRating()+"*");
 			System.out.println("-----------");
-		}
+		}*/
 		return groups;
 		
 
@@ -286,7 +291,7 @@ public class Test2 {
 	// Read the prices located in the price_list.txt
 	// Parse the file and put it in a HashMap with (Key = Name of the component,
 	// Value = PriceOfTheCompoenent)
-	public static Map<String, Integer> readPricesFromFile(Map<String, Integer> prices, String filename)
+	public static Map<String, Component> readPricesFromFile(Map<String, Component> prices, String filename)
 			throws NumberFormatException, IOException {
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
@@ -296,10 +301,11 @@ public class Test2 {
 
 				String key = ss[0];
 				String value = ss[1];
+				String value2 = ss[2];
 
-				System.out.println("Read: " + key + " " + value);
-
-				prices.put(key, Integer.valueOf(value));
+				System.out.println("Read: " + key + " " + value + " "+ value2);
+				;
+				prices.put(key, new Component(Integer.valueOf(ss[1]),Integer.valueOf(ss[2])));
 			}
 		}
 		return prices;
@@ -317,22 +323,39 @@ public class Test2 {
 
 	// Sort and print the PC group list ordered by the total sum
 	@SuppressWarnings("unchecked")
-	public static void fromCheapest(List<Group> groups) {
+	public static void fromCheapest(RacerClient racer,List<Group> groups) throws RacerClientException {
 		// sort the group by total price
 		Collections.sort(groups);
 
+		int i =0;
 		for (Group g : groups) {
-			int sum = g.getCpuPrice() + g.getGpuPrice() + g.getMotherBoardPrice() + g.getRamPrice()
-					+ g.getStoragePrice();
+			i = i + 1;
 			System.out.println("-----------");
+			System.out.println("Comp"+i);
 			System.out.println(g.getGpu() + " = " + g.getGpuPrice() + "$");
 			System.out.println(g.getRam() + " = " + g.getRamPrice() + "$");
 			System.out.println(g.getCpu() + " = " + g.getCpuPrice() + "$");
 			System.out.println(g.getMotherBoard() + " = " +g.getMotherBoardPrice() + "$");
 			System.out.println(g.getStorage() + " = " + g.getStoragePrice() + "$");
-
-			System.out.println("Total sum= " + sum + "$");
+			
+			System.out.println("Total price= "+ g.getTotalPrice()+"$");
+			System.out.println("Rating= "+ g.getAverageRating()+"*");
+			
+			String to_send = "(INSTANCE "+ "COMP"+i +" PC)";
+			
+			System.out.println(to_send);
+		
+			racer.sendRaw(to_send);
+			
+			to_send = "(ATTRIBUTE-FILLER "+ "COMP"+i + " "+g.getAverageRating()+" RATING)";
+			
+			System.out.println(to_send);
+			racer.sendRaw(to_send);
 		}
+		
+		System.out.println("Good PC: "+racer.sendRaw("(CONCEPT-INSTANCES GOODPC)"));
+		System.out.println("Bad PC: "+racer.sendRaw("(CONCEPT-INSTANCES BADPC)"));
+		System.out.println("Gaming PC: "+racer.sendRaw("(CONCEPT-INSTANCES GAMINGPC)"));
 	}
 	
 	
@@ -341,7 +364,7 @@ public class Test2 {
 		System.out.println(racer.sendRaw(s));
 	}
 
-	public static void test(RacerClient racer, Map<String, Integer> prices) throws RacerClientException {
+	public static void test(RacerClient racer, Map<String, Component> prices) throws RacerClientException {
 
 		// random test
 		RAM ram = new RAM("rami");
@@ -367,7 +390,7 @@ public class Test2 {
 		System.out.println("The result: " + result);
 
 		// Print the result sorted by the cheapest PC
-		fromCheapest(getAllCombinationsForPC(prices, result));
+		fromCheapest(racer,getAllCombinationsForPC(prices, result));
   
 	}
    
@@ -393,7 +416,7 @@ public class Test2 {
 			System.out.println("Got: " + racer_received);
 
 			// Prices MAP
-			Map<String, Integer> prices = new HashMap<String, Integer>();
+			Map<String, Component> prices = new HashMap<String, Component>();
 
 			// read the prices from the file
 			prices = readPricesFromFile(prices, "src/price_list.txt");
@@ -435,7 +458,7 @@ public class Test2 {
 
 
 			test(racer, prices);
-            System.out.println(racer.sendRaw("(concept-instances ram)"));
+            //System.out.println(racer.sendRaw("(concept-instances ram)"));
 			// CPU cpu = new CPU("Te");
 			// System.out.println(cpu.getName());
 

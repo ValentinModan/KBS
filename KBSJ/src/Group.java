@@ -17,6 +17,15 @@ public class Group implements Comparable{
 	private Storage storage;
 	private int storagePrice;
 	
+	public int getTotalPrice()
+	{
+		return this.gpuPrice + this.ramPrice + this.cpuPrice + this.storagePrice + this.motherBoardPrice;
+	}
+	
+	public float getAverageRating()
+	{
+		return (float) ((this.gpu.getRating() + this.ram.getRating() + this.cpu.getRating() + this.storage.getRating() + this.motherBoard.getRating())/5.0);
+	}
 	
 	public Group()
 	{

@@ -8,8 +8,19 @@ public  class CommonParameters {
     protected String name = this.getClass().getSimpleName();
 
     protected String brandName = "f5a5a608";
+    protected int rating;
+    
+    
 
-    public String getBrandName() {
+    public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
+	public String getBrandName() {
         return brandName;
     }
 
