@@ -1,6 +1,9 @@
 package instances;
 
-public class RAM extends CommonParameters{
+import java.util.ArrayList;
+import java.util.List;
+
+public class RAM extends CommonParameters {
 
 	private String ramName;
 
@@ -8,53 +11,64 @@ public class RAM extends CommonParameters{
 
 	private int hasMemory;
 
-	public String isRam(){
-	    return  "RAM ";
-    }
+	public String createInstance() {
+		return "(instance " + this.ramName + " RAM)";
+	}
 
-    public String minimumMemory() {
-        return "(>= HASMEMORY "+ hasMemory +".0)";
-}
+	public List<String> createAttributes() {
+		List<String> instance = new ArrayList<String>();
 
-    public String hasType() {
-	   return "(= HASRAMTYPE "+ hasRamType + ".0)";
-    }
+		instance.add("(attribute-filler " + this.ramName + " " + this.hasRamType + ".0 hasRamType)");
+		instance.add("(attribute-filler " + this.ramName + " " + this.hasMemory + ".0 hasMemory)");
 
-    public RAM(String ramName) {
-        super();
-        this.ramName = ramName;
-        this.hasMemory = 0;
-        this.hasRamType = 0;
-    }
+		return instance;
+	}
 
-    public RAM(String ramName, int hasRamType, int hasMemory) {
-        this.ramName = ramName;
-        this.hasRamType = hasRamType;
-        this.hasMemory = hasMemory;
-    }
+	public String isRam() {
+		return "RAM ";
+	}
 
-    public int getHasRamType() {
-        return hasRamType;
-    }
+	public String minimumMemory() {
+		return "(>= HASMEMORY " + hasMemory + ".0)";
+	}
 
-    public void setHasRamType(int hasRamType) {
-        this.hasRamType = hasRamType;
-    }
+	public String hasType() {
+		return "(= HASRAMTYPE " + hasRamType + ".0)";
+	}
 
-    public int getHasMemory() {
-        return hasMemory;
-    }
+	public RAM(String ramName) {
+		super();
+		this.ramName = ramName;
+		this.hasMemory = 0;
+		this.hasRamType = 0;
+	}
 
-    public void setHasMemory(int hasMemory) {
-        this.hasMemory = hasMemory;
-    }
+	public RAM(String ramName, int hasRamType, int hasMemory) {
+		this.ramName = ramName;
+		this.hasRamType = hasRamType;
+		this.hasMemory = hasMemory;
+	}
 
-    @Override
+	public int getHasRamType() {
+		return hasRamType;
+	}
+
+	public void setHasRamType(int hasRamType) {
+		this.hasRamType = hasRamType;
+	}
+
+	public int getHasMemory() {
+		return hasMemory;
+	}
+
+	public void setHasMemory(int hasMemory) {
+		this.hasMemory = hasMemory;
+	}
+
+	@Override
 	public String toString() {
 		return "RAM [ramName=" + ramName + "]";
 	}
-
-
 
 	public String getRamName() {
 		return ramName;
@@ -64,5 +78,4 @@ public class RAM extends CommonParameters{
 		this.ramName = ramName;
 	}
 
-	
 }

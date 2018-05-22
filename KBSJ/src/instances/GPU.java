@@ -1,11 +1,29 @@
 package instances;
 
-public class GPU extends CommonParameters{
+import java.util.ArrayList;
+import java.util.List;
+
+public class GPU extends CommonParameters {
 	private String gpuName;
 
 	private int hasMemory;
 	private int hasPCIExpress;
 	private int hasPowerSource;
+
+	public String createInstance() {
+
+		return "(instance " + this.gpuName + " GPU)";
+	}
+
+	public List<String> createAttributes() {
+		List<String> instance = new ArrayList<String>();
+
+		instance.add("(attribute-filler " + this.gpuName + " " + this.hasMemory + ".0 hasMemory)");
+		instance.add("(attribute-filler " + this.gpuName + " " + this.hasPCIExpress + ".0 hasPCIExpress)");
+		instance.add("(attribute-filler " + this.gpuName + " " + this.hasPowerSource + ".0 hasPowerSource)");
+
+		return instance;
+	}
 
 	public GPU(String gpuName, int hasMemory, int hasPCIExpress, int hasPowerSource) {
 		this.gpuName = gpuName;
@@ -14,17 +32,17 @@ public class GPU extends CommonParameters{
 		this.hasPowerSource = hasPowerSource;
 	}
 
-    public String isGPU(){
-        return  "GPU ";
-    }
+	public String isGPU() {
+		return "GPU ";
+	}
 
-    public String hasPowerSource() {
-        return "(= hasPowerSource "+ hasPowerSource + ".0)";
-    }
+	public String hasPowerSource() {
+		return "(= hasPowerSource " + hasPowerSource + ".0)";
+	}
 
-    public String minimumMemory() {
-        return "(>= HASMEMORY "+ hasMemory +".0)";
-    }
+	public String minimumMemory() {
+		return "(>= HASMEMORY " + hasMemory + ".0)";
+	}
 
 	public GPU(String gpuName) {
 		super();
@@ -67,8 +85,5 @@ public class GPU extends CommonParameters{
 	public String toString() {
 		return "GPU [gpuName=" + gpuName + "]";
 	}
-
-
-	
 
 }

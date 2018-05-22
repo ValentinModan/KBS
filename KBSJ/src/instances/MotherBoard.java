@@ -1,79 +1,104 @@
 package instances;
 
-public class MotherBoard extends CommonParameters{
-    private String motherBoardName;
+import java.util.ArrayList;
+import java.util.List;
 
-    //GPU
-    private int hasPCIExpress;
-    private int hasPowerSource;
+public class MotherBoard extends CommonParameters {
+	private String motherBoardName;
 
-    //CPU
-    private int hasSocket;
+	// GPU
+	private int hasPCIExpress;
+	private int hasPowerSource;
 
-    //RAM
-    private int hasRamType;
+	// CPU
+	private int hasSocket;
 
-    //Storage
-    private int hasSATAType;
+	// RAM
+	private int hasRamType;
 
-    public MotherBoard(String motherBoardName) {
-        this.motherBoardName = motherBoardName;
-    }
+	// Storage
+	private int hasSATAType;
 
-    public MotherBoard(String motherBoardName, int hasPCIExpress, int hasPowerSource, int hasSocket, int hasRamType, int hasSATAType) {
-        this.motherBoardName = motherBoardName;
-        this.hasPCIExpress = hasPCIExpress;
-        this.hasPowerSource = hasPowerSource;
-        this.hasSocket = hasSocket;
-        this.hasRamType = hasRamType;
-        this.hasSATAType = hasSATAType;
-    }
+	public String createInstance() {
+		return "(instance " + this.motherBoardName + " MotherBoard)";
+	}
 
-    public String getMotherBoardName() {
-        return motherBoardName;
-    }
+	public List<String> createAttributes() {
+		List<String> instance = new ArrayList<String>();
 
-    public void setMotherBoardName(String motherBoardName) {
-        this.motherBoardName = motherBoardName;
-    }
+		instance.add("(attribute-filler " + this.motherBoardName + " " + this.hasPCIExpress + ".0 hasPCIExpress)");
+		instance.add("(attribute-filler " + this.motherBoardName + " " + this.hasPowerSource + ".0 hasPowerSource)");
+		instance.add("(attribute-filler " + this.motherBoardName + " " + this.hasSocket + ".0 hasSocket)");
+		instance.add("(attribute-filler " + this.motherBoardName + " " + this.hasRamType + ".0 hasRamType)");
+		instance.add("(attribute-filler " + this.motherBoardName + " " + this.hasSATAType + ".0 hasSATAType)");
 
-    public int getHasPCIExpress() {
-        return hasPCIExpress;
-    }
+		return instance;
+	}
 
-    public void setHasPCIExpress(int hasPCIExpress) {
-        this.hasPCIExpress = hasPCIExpress;
-    }
+	public MotherBoard(String motherBoardName) {
+		this.motherBoardName = motherBoardName;
+	}
 
-    public int getHasPowerSource() {
-        return hasPowerSource;
-    }
+	public MotherBoard(String motherBoardName, int hasPCIExpress, int hasPowerSource, int hasSocket, int hasRamType,
+			int hasSATAType) {
+		this.motherBoardName = motherBoardName;
+		this.hasPCIExpress = hasPCIExpress;
+		this.hasPowerSource = hasPowerSource;
+		this.hasSocket = hasSocket;
+		this.hasRamType = hasRamType;
+		this.hasSATAType = hasSATAType;
+	}
 
-    public void setHasPowerSource(int hasPowerSource) {
-        this.hasPowerSource = hasPowerSource;
-    }
+	public String getMotherBoardName() {
+		return motherBoardName;
+	}
 
-    public int getHasSocket() {
-        return hasSocket;
-    }
+	public void setMotherBoardName(String motherBoardName) {
+		this.motherBoardName = motherBoardName;
+	}
 
-    public void setHasSocket(int hasSocket) {
-        this.hasSocket = hasSocket;
-    }
+	public int getHasPCIExpress() {
+		return hasPCIExpress;
+	}
 
-    public int getHasRamType() {
-        return hasRamType;
-    }
+	public void setHasPCIExpress(int hasPCIExpress) {
+		this.hasPCIExpress = hasPCIExpress;
+	}
 
-    public void setHasRamType(int hasRamType) {
-        this.hasRamType = hasRamType;
-    }
+	public int getHasPowerSource() {
+		return hasPowerSource;
+	}
 
-    public int getHasSATAType() {
-        return hasSATAType;
-    }
+	public void setHasPowerSource(int hasPowerSource) {
+		this.hasPowerSource = hasPowerSource;
+	}
 
-    public void setHasSATAType(int hasSATAType) {
-        this.hasSATAType = hasSATAType;
-    }
+	public int getHasSocket() {
+		return hasSocket;
+	}
+
+	public void setHasSocket(int hasSocket) {
+		this.hasSocket = hasSocket;
+	}
+
+	public int getHasRamType() {
+		return hasRamType;
+	}
+
+	public void setHasRamType(int hasRamType) {
+		this.hasRamType = hasRamType;
+	}
+
+	public int getHasSATAType() {
+		return hasSATAType;
+	}
+
+	public void setHasSATAType(int hasSATAType) {
+		this.hasSATAType = hasSATAType;
+	}
+
+	@Override
+	public String toString() {
+		return "MotherBoard [motherBoardName=" + motherBoardName + "]";
+	}
 }

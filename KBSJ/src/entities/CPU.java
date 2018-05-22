@@ -14,7 +14,8 @@ public class CPU {
         this.hasRole = "has" + role;
         this.role = role;
     }
-
+    
+ 
 
     public static ArrayList<String> hasCPUVersion(String cpuName, String version){
         ArrayList<String> mesaj = new ArrayList<>();
