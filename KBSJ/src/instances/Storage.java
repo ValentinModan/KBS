@@ -17,6 +17,8 @@ public class Storage extends CommonParameters {
 
 		instance.add("(attribute-filler " + this.hddName + " " + this.hasSATAType + ".0 hasSATAType)");
 		instance.add("(attribute-filler " + this.hddName + " " + this.hasMemory + ".0 hasMemory)");
+		instance.add("(attribute-filler " + this.hddName + " " + this.brandName.hashCode() + ".0 HASBRAND)");
+
 
 		return instance;
 	}

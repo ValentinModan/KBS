@@ -21,6 +21,7 @@ public class GPU extends CommonParameters {
 		instance.add("(attribute-filler " + this.gpuName + " " + this.hasMemory + ".0 hasMemory)");
 		instance.add("(attribute-filler " + this.gpuName + " " + this.hasPCIExpress + ".0 hasPCIExpress)");
 		instance.add("(attribute-filler " + this.gpuName + " " + this.hasPowerSource + ".0 hasPowerSource)");
+		instance.add("(attribute-filler " + this.gpuName + " " + this.brandName.hashCode() + ".0 HASBRAND)");
 
 		return instance;
 	}

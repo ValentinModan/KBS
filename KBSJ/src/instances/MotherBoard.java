@@ -31,6 +31,8 @@ public class MotherBoard extends CommonParameters {
 		instance.add("(attribute-filler " + this.motherBoardName + " " + this.hasSocket + ".0 hasSocket)");
 		instance.add("(attribute-filler " + this.motherBoardName + " " + this.hasRamType + ".0 hasRamType)");
 		instance.add("(attribute-filler " + this.motherBoardName + " " + this.hasSATAType + ".0 hasSATAType)");
+		instance.add("(attribute-filler " + this.motherBoardName + " " + this.brandName.hashCode() + ".0 HASBRAND)");
+
 
 		return instance;
 	}

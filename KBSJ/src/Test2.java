@@ -136,19 +136,23 @@ public class Test2 {
 		// ram
 		stringBuilder.append(stringChecker(ram, "HASMEMORY", ram.getHasMemory(), true));
 		stringBuilder.append(stringChecker(ram, "HASRAMTYPE", ram.getHasRamType(), false));
+		stringBuilder.append(stringChecker(ram, "HASBRAND", ram.getBrandName().hashCode(), false));
 
 		// gpu
 		stringBuilder.append(stringChecker(gpu, "hasMemory", gpu.getHasMemory(), true));
 		stringBuilder.append(stringChecker(gpu, "hasPCIExpress", gpu.getHasPCIExpress(), false));
 		stringBuilder.append(stringChecker(gpu, "hasPowerSource", gpu.getHasPowerSource(), true));
+		stringBuilder.append(stringChecker(gpu, "HASBRAND", gpu.getBrandName().hashCode(), false));
 
 		// cpu
 		stringBuilder.append(stringChecker(cpu, "hasCores", cpu.getHasCores(), true));
 		stringBuilder.append(stringChecker(cpu, "hasSocket", cpu.getHasSocket(), false));
 		stringBuilder.append(stringChecker(cpu, "HasFrequency", cpu.getHasFrequency(), true));
+		stringBuilder.append(stringChecker(cpu, "HASBRAND", gpu.getBrandName().hashCode(), false));
 
 		// storage
 		stringBuilder.append(stringChecker(storage, "hasSATAType", storage.getHasSATAType(), false));
+		stringBuilder.append(stringChecker(storage, "HASBRAND", storage.getBrandName().hashCode(), false));
 
 		// motherboard
 		stringBuilder.append(stringChecker(motherBoard, "HasPCIExpress", motherBoard.getHasPCIExpress(), false));
@@ -156,6 +160,8 @@ public class Test2 {
 		stringBuilder.append(stringChecker(motherBoard, "HasRamType", motherBoard.getHasRamType(), false));
 		stringBuilder.append(stringChecker(motherBoard, "HasSATAType", motherBoard.getHasSATAType(), false));
 		stringBuilder.append(stringChecker(motherBoard, "HasSocket", motherBoard.getHasSocket(), false));
+		stringBuilder.append(stringChecker(motherBoard, "HASBRAND", motherBoard.getBrandName().hashCode(), false));
+
 
 		// dependencies
 		stringBuilder.append(generate_dependencies());
@@ -352,6 +358,7 @@ public class Test2 {
 		// printresult(racer, generate_retrieve(cpu, gpu, storage, motherBoard, ram));
 		// ram.setHasRamType(3);
 
+        //ram.setBrandName("ADATA");
 		String to_send = generate_retrieve(cpu, gpu, storage, motherBoard, ram);
 
 		String result = racer.sendRaw(to_send);
@@ -391,26 +398,44 @@ public class Test2 {
 			// read the prices from the file
 			prices = readPricesFromFile(prices, "src/price_list.txt");
 
-			getAllCombinations(prices, racer_received);
-			
-			GPU gpu1=new GPU("GTX_1060",12,3,800);
-			
-			racer.sendRaw(gpu1.createInstance());
-			
-			List<String> cpuAttr =  gpu1.createAttributes();
-			
+//			getAllCombinations(prices, racer_received);
+//
+//			GPU gpu1=new GPU("GTX_1060",12,3,800);
+//
+//			racer.sendRaw(gpu1.createInstance());
+//
+//			List<String> cpuAttr =  gpu1.createAttributes();
+//
+//			for(String s : cpuAttr)
+//			{
+//				System.out.println(s);
+//				racer.sendRaw(s);
+//			}
+//
+		   // racer_received = racer.sendRaw(cq2(15, 7));
+			//getAllCombinations(prices, racer_received);
+
+          /*  String x = "ADATA";
+            System.out.println(x.hashCode());
+
+            x = "HyperX";
+            System.out.println(x.hashCode());*/
+
+            RAM ram =new RAM("hiperRam","hyperRamXTREME",4,13);
+            racer.sendRaw(ram.createInstance());
+
+
+            List<String> cpuAttr =  ram.createAttributes();
+
 			for(String s : cpuAttr)
 			{
 				System.out.println(s);
 				racer.sendRaw(s);
 			}
-			
-		    racer_received = racer.sendRaw(cq2(15, 7));
-			getAllCombinations(prices, racer_received);
-			
 
-			//test(racer, prices);
 
+			test(racer, prices);
+            System.out.println(racer.sendRaw("(concept-instances ram)"));
 			// CPU cpu = new CPU("Te");
 			// System.out.println(cpu.getName());
 

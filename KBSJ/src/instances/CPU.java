@@ -25,6 +25,7 @@ public class CPU extends CommonParameters {
 		instance.add("(attribute-filler " + this.cpuName + " " + this.hasCores + ".0 hasCores)");
 		instance.add("(attribute-filler " + this.cpuName + " " + this.hasFrequency + ".0 hasFrequency)");
 		instance.add("(attribute-filler " + this.cpuName + " " + this.hasSocket + ".0 hasSocket)");
+		instance.add("(attribute-filler " + this.cpuName + " " + this.brandName.hashCode() + ".0 HASBRAND)");
 
 		return instance;
 	}

@@ -1,11 +1,24 @@
 package instances;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public  class CommonParameters {
 
     protected String name = this.getClass().getSimpleName();
 
-    public CommonParameters(String name) {
-        this.name = name;
+    protected String brandName = "f5a5a608";
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public CommonParameters(String brandName) {
+        this.brandName = brandName;
 }
 
     public CommonParameters() {

@@ -20,6 +20,8 @@ public class RAM extends CommonParameters {
 
 		instance.add("(attribute-filler " + this.ramName + " " + this.hasRamType + ".0 hasRamType)");
 		instance.add("(attribute-filler " + this.ramName + " " + this.hasMemory + ".0 hasMemory)");
+		instance.add("(attribute-filler " + this.ramName + " " + this.brandName.hashCode() + ".0 HASBRAND)");
+
 
 		return instance;
 	}
@@ -36,12 +38,21 @@ public class RAM extends CommonParameters {
 		return "(= HASRAMTYPE " + hasRamType + ".0)";
 	}
 
-	public RAM(String ramName) {
+    public RAM(String brandName, String ramName, int hasRamType, int hasMemory) {
+        super(brandName);
+        this.ramName = ramName;
+        this.hasRamType = hasRamType;
+        this.hasMemory = hasMemory;
+    }
+
+    public RAM(String ramName) {
 		super();
 		this.ramName = ramName;
 		this.hasMemory = 0;
 		this.hasRamType = 0;
 	}
+
+
 
 	public RAM(String ramName, int hasRamType, int hasMemory) {
 		this.ramName = ramName;
